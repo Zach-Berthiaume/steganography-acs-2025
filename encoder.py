@@ -30,16 +30,17 @@ while (True):
 while (True):
 
     # take input for file to decode
-    audio_file = input('Input .mp3 file path to encode message with (must be within this directory): ')
+    audio_file = input('Input .wav file path to encode message with (must be within this directory): ')
 
     # canonicalize path to file and check that its valid
     audio_file = Path(audio_file).resolve()
-    if check_for_correct_dir(audio_file) and str(audio_file).lower().endswith('.mp3') and audio_file.exists():
+    if check_for_correct_dir(audio_file) and str(audio_file).lower().endswith('.wav') and audio_file.exists():
         print(audio_file)
         break
     else:
         print("Please input a proper file  or file path.")
         continue
+
 
 
 # encode message into mp3 file and output to separate .txt file
@@ -53,7 +54,7 @@ message = text_to_binary(message)
 message += '10101010101010101'
 
 # load mp3 into numpy array of amplitudes
-audio = AudioSegment.from_mp3(audio_file)
+audio = AudioSegment.from_wav(audio_file)
 samples_array = np.array(audio.get_array_of_samples())
 
 # makes sure message is short enough to be encoded in the audio

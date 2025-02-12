@@ -42,7 +42,6 @@ while (True):
         continue
 
 
-
 # encode message into mp3 file and output to separate .txt file
 
 # loads message from txt and converts to binary

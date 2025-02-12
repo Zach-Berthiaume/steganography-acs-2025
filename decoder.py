@@ -37,5 +37,6 @@ for sample in samples_array:
     if message.endswith('10101010101010101'):
         break
 
+# export decoded message to new file
 with open('decoded_message.txt', 'w') as file:
-    file.write(binary_to_text(message[:-15]))
+    file.write(binary_to_text(message[:-17]))

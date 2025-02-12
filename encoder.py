@@ -3,7 +3,7 @@ from pydub import AudioSegment
 from pathlib import Path
 
 def text_to_binary(text):
-    return ''.join(format(ord(i), '08d') for i in text)
+    return ''.join(format(ord(i), '08b') for i in text)
 
 # makes sure that input file is in correct directory
 def check_for_correct_dir(file_path):
@@ -49,6 +49,21 @@ with open(text_file, 'r') as file:
     message = file.read()
 message = text_to_binary(message)
 
+# adds marker to end of message for decoder
+message += '10101010101010101'
+
 # load mp3 into numpy array of amplitudes
 audio = AudioSegment.from_mp3(audio_file)
 samples_array = np.array(audio.get_array_of_samples())
+
+# makes sure message is short enough to be encoded in the audio
+if len(message) > len(samples_array):
+    print("Message is too long!")
+    quit()
+
+# flip rightmost bit in sample array when message contains 1
+for i in range(len(message)):
+    samples_array[i] ^= 1 if message[i] == '1' else 0
+
+# export encoded sample_array
+AudioSegment(samples_array.tobytes(), frame_rate = audio.frame_rate, sample_width = audio.sample_width, channels = audio.channels).export('encoded_audio.mp3', format = 'mp3')

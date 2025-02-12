@@ -32,10 +32,15 @@ samples_array = np.array(audio.get_array_of_samples())
 
 # extract message
 message = ''
-for sample in samples_array:
-    message += str(sample & 1)
+for i in range(len(samples_array)):
+    message += str(samples_array[i] & 1)
+    if message.endswith('11110000111100000'):
+        message = message[:17]
+        break
     if message.endswith('10101010101010101'):
         break
+
+print(message)
 
 # export decoded message to new file
 with open('decoded_message.txt', 'w') as file:

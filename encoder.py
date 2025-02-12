@@ -49,8 +49,8 @@ with open(text_file, 'r') as file:
     message = file.read()
 message = text_to_binary(message)
 
-# adds marker to end of message for decoder
-message += '10101010101010101'
+# adds marker to beginning and end of message for decoder
+message = '11110000111100000' + message + '10101010101010101'
 
 # load mp3 into numpy array of amplitudes
 audio = AudioSegment.from_wav(audio_file)
@@ -61,9 +61,19 @@ if len(message) > len(samples_array):
     print("Message is too long!")
     quit()
 
-# flip rightmost bit in sample array when message contains 1
+# get point to start encoding message by finding when samples_array amplitude becomes non-zero
+start = 0
+for i in range(len(samples_array)):
+    if abs(samples_array[i]) > 100:
+        start = i
+        break
+
+# encode message by flipping rightmost bit in sample array when message binary contains 1
 for i in range(len(message)):
-    samples_array[i] ^= 1 if message[i] == '1' else 0
+
+    samples_array[i + start] = (samples_array[i] ^ 1) | int(message[i])
+
+    # samples_array[i + start] ^= 1 if message[i] == '1' else 0
 
 # export encoded sample_array
 AudioSegment(samples_array.tobytes(), frame_rate = audio.frame_rate, sample_width = audio.sample_width, channels = audio.channels).export('encoded_audio.wav', format = 'wav')

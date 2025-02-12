@@ -30,17 +30,14 @@ while (True):
 audio = AudioSegment.from_wav(audio_file)
 samples_array = np.array(audio.get_array_of_samples())
 
-# extract message
+# extract message by looking for start and end of message
 message = ''
-for i in range(len(samples_array)):
-    message += str(samples_array[i] & 1)
-    if message.endswith('11110000111100000'):
-        message = message[:17]
-        break
+for i in samples_array:
+    message += str(i & 1)
+    if message.endswith('11001100110011001'):
+        message = ''
     if message.endswith('10101010101010101'):
         break
-
-print(message)
 
 # export decoded message to new file
 with open('decoded_message.txt', 'w') as file:

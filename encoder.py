@@ -15,7 +15,7 @@ def check_for_correct_dir(file_path):
 while (True):
 
     # take input for file to decode
-    text_file = input('Input .txt file path with message to decode (must be within this directory): ')
+    text_file = input('Input .txt file path with message to encode (must be within this directory): ')
 
     # canonicalize path to file and check that its valid
     text_file = Path(text_file).resolve()
@@ -30,7 +30,7 @@ while (True):
 while (True):
 
     # take input for file to decode
-    audio_file = input('Input .mp3 file path to decode message with (must be within this directory): ')
+    audio_file = input('Input .mp3 file path to encode message with (must be within this directory): ')
 
     # canonicalize path to file and check that its valid
     audio_file = Path(audio_file).resolve()
@@ -66,4 +66,4 @@ for i in range(len(message)):
     samples_array[i] ^= 1 if message[i] == '1' else 0
 
 # export encoded sample_array
-AudioSegment(samples_array.tobytes(), frame_rate = audio.frame_rate, sample_width = audio.sample_width, channels = audio.channels).export('encoded_audio.mp3', format = 'mp3')
+AudioSegment(samples_array.tobytes(), frame_rate = audio.frame_rate, sample_width = audio.sample_width, channels = audio.channels).export('encoded_audio.wav', format = 'wav')
